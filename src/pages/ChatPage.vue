@@ -8,7 +8,7 @@
       </div>
       <div class="side-bar">
         <p>Подключено пользователей: {{ connectionCount }}</p>
-        <span class="user-list" v-for="user in users" :key="user">
+        <span class="user-list" v-for="user in users" :key="user.id">
           <span :class="{ 'isAdmin': user.role === 'admin' }">{{ user.username }}</span>
         </span>
       </div>
@@ -26,22 +26,34 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import Input from "@/components/Input.vue";
 import {useUserStore} from "@/modules/User/UserStore.ts";
 import Message from "@/components/Message.vue";
-import AbstractWebSocketService from '@/modules/services/AbstractWebSocketService';
 import WebSocketService from '@/modules/services/WebSocketService';
 import {MessageType} from "@/types/MessageType.ts";
 import {useRouter} from "vue-router";
 import AuthService from "@/modules/services/AuthService.ts";
 
-const messages = ref([]);
+interface Message {
+  username: string;
+  role: string;
+  text: string;
+  createdAt: string;
+}
+
+interface User {
+  username: string;
+  role: string;
+  id: string;
+}
+
+const messages = ref<Message[]>([]);
 const message = ref('');
 const connectionCount = ref(0);
-const users = ref([])
-const token = ref(localStorage.getItem('token') || null);
+const users = ref<User[]>([])
+const token = ref(localStorage.getItem('token') || "");
 const userStore = useUserStore()
 const router = useRouter()
 
 
-const webSocketService: AbstractWebSocketService = new WebSocketService(
+const webSocketService = new WebSocketService(
     import.meta.env.VITE_WS_URL
 );
 
@@ -94,9 +106,9 @@ const sendMessage = () => {
 onMounted(async () => {
   try {
     const userInfo = await AuthService.info();
-    userStore.setUser(userInfo);
+    userStore.setUser(userInfo.user);
 
-    webSocketService.connect(token.value, userStore.username);
+    webSocketService.connect(token.value, userStore.getUsername);
     webSocketService.addMessageHandler(handleMessage);
 
   } catch (error: any) {

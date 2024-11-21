@@ -7,8 +7,8 @@ abstract class AbstractWebsocketService {
     this.messageHandlers.push(handler)
   }
 
-  removeMessageHandler(): void {
-    this.messageHandlers = this.messageHandlers.filter((handler) => handler !== handler)
+  removeMessageHandler(messageHandler: MessageHandler): void {
+    this.messageHandlers = this.messageHandlers.filter((handler) => handler !== messageHandler)
   }
 
   abstract connect(token: string, username: string): void;

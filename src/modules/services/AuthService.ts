@@ -26,13 +26,13 @@ class AuthService extends ApiService {
     await this.post<void>('/auth/register', { username, password });
   }
 
-  async info(): Promise<UserInfo> {
+  async info(): Promise<LoginResponse> {
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('Токен отсутствует');
     }
 
-    return await this.get<UserInfo>('/auth/info', {
+    return await this.get<LoginResponse>('/auth/info', {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -18,9 +18,9 @@ export const useUserStore = defineStore('user', {
   }),
 
   getters: {
-    isAuthenticated(state): boolean {
-      return !!state.user.username;
-    },
+    // isAuthenticated(state): boolean {
+    //   return !!state.user.username;
+    // },
     getUsername(state): string {
       return state.user.username;
     },

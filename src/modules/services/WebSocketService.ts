@@ -25,16 +25,16 @@ class WebSocketService extends AbstractWebsocketService {
       console.error('Ошибка при подключении к WebSocket:', error);
     }
 
-    this.socket.onmessage = (event) => {
+    this.socket!.onmessage = (event) => {
       const data = JSON.parse(event.data)
       this.messageHandlers.forEach(handler => handler(data))
     }
 
-    this.socket.onclose = () => {
+    this.socket!.onclose = () => {
       console.log('Соединение с websocket сервером закрыто')
     }
 
-    this.socket.onerror = (error) => {
+    this.socket!.onerror = (error) => {
       console.error('Ошибка:', error)
     }
   }
