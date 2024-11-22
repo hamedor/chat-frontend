@@ -9,7 +9,7 @@
       <div class="side-bar">
         <p>Подключено пользователей: {{ connectionCount }}</p>
         <span class="user-list" v-for="user in users" :key="user.id">
-          <span :class="{ 'isAdmin': user.role === 'admin' }">{{ user.username }}</span>
+          <span v-if="user.role !== 'Гость'" :class="{ 'isAdmin': user.role === 'admin' }">{{ user.username }}</span>
         </span>
       </div>
     </div>
